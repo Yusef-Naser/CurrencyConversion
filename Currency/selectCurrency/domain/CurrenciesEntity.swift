@@ -14,10 +14,12 @@ struct CurrenciesEntity : Decodable , Identifiable  {
     var success: Bool?
     var symbols: [String: String]?
     var currencies : [CurrencyEntity] = []
+    let error: APIError?
     
     enum CodingKeys: String, CodingKey{
         case success
         case symbols
+        case error
     }
 
 

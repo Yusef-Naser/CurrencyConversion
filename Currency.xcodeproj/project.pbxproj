@@ -143,6 +143,7 @@
 			isa = PBXGroup;
 			children = (
 				2CB9F35B2A2D0CA60093EF25 /* Info.plist */,
+				2CB9F3562A2D01880093EF25 /* Configurations.swift */,
 				2CB9F3582A2D04890093EF25 /* Network */,
 				2CD27D9D2A2B640100EFB52A /* selectCurrency */,
 				2CD27D8C2A2B5B9D00EFB52A /* convertCurrency */,
@@ -153,7 +154,6 @@
 				2CD27D632A2B5AA000EFB52A /* Persistence.swift */,
 				2CD27D652A2B5AA000EFB52A /* Currency.xcdatamodeld */,
 				2CD27D602A2B5AA000EFB52A /* Preview Content */,
-				2CB9F3562A2D01880093EF25 /* Configurations.swift */,
 			);
 			path = Currency;
 			sourceTree = "<group>";

@@ -11,17 +11,16 @@ struct SelectCurrencyView: View {
     
     @Environment(\.presentationMode) private var presentationMode
     
-    @State var searchText = ""
     @ObservedObject var viewModel = SelectCurrencyVM()
     
     @Binding var selectedItem : CurrencyEntity
     
     var body: some View {
             VStack {
-                SearchBarView(text: $searchText)
+                SearchBarView(text: $viewModel.searchText)
                     .padding(.top , 16)
                 
-                List ( (viewModel.currencies?.currencies ?? [] ).filter({ searchText.isEmpty ? true  : ($0.country.contains(searchText) || $0.symbol.contains(searchText))  }) ){ currency in
+                List ( (viewModel.currencies?.currencies ?? [] ).filter({ viewModel.searchText.isEmpty ? true  : ($0.country.contains(viewModel.searchText) || $0.symbol.contains(viewModel.searchText))  }) ){ currency in
                     CurrencyItem(currency: currency)
                         .onTapGesture {
                             selectedItem = currency
@@ -29,7 +28,11 @@ struct SelectCurrencyView: View {
                         }
                 }
                 
+                
             }
+            .alert(isPresented: $viewModel.showAlert, content: {
+                Alert(title: Text(viewModel.errorMessage))
+            })
             .navigationTitle("Currencies")
         
     }

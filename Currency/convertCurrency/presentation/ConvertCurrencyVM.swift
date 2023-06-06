@@ -23,6 +23,9 @@ class ConvertCurrencyVM : ObservableObject {
     var rateCurrency_2 : Double = 0.0
     var lastTimeStamp : Int64 = 0
     
+    @Published var showAlert = false
+    @Published var errorMessage = ""
+    
     init() {
         
     }
@@ -93,30 +96,36 @@ class ConvertCurrencyVM : ObservableObject {
         
         let task = URLSession.shared.dataTask(with: url) { data , response , error in
             if let error = error {
-                print(error)
+                self.errorMessage = error.localizedDescription
+                self.showAlert = true
                 return
             }
             if let data = data {
                 DispatchQueue.main.async {
-                    self.convertedCurrency = self.parseJsonData (data : data )
+                    self.convertedCurrency = ParseData<ConvertCurrencyEntity>.parseJsonData(data: data)
+                    if let error =  self.convertedCurrency?.error {
+                        self.errorMessage = error.info ?? "Error"
+                        self.showAlert = true
+                    }
                     self.lastTimeStamp = Int64(self.convertedCurrency?.timestamp ?? 0)
                     rate(self.convertedCurrency?.rates?[currency?.symbol ?? ""] ?? 0)
+                    
                 }
             }
         }
         task.resume()
     }
     
-    private func parseJsonData(data : Data ) -> ConvertCurrencyEntity? {
-        let decode = JSONDecoder()
-        do {
-            let curr = try decode.decode(ConvertCurrencyEntity.self , from: data)
-            //rate = curr.rates?[currency.symbol] ?? 0
-            return curr
-        }catch{
-            print("Error fetching data from Pexels: \(error)")
-        }
-        return nil
-    }
+//    private func parseJsonData(data : Data ) -> ConvertCurrencyEntity? {
+//        let decode = JSONDecoder()
+//        do {
+//            let curr = try decode.decode(ConvertCurrencyEntity.self , from: data)
+//            //rate = curr.rates?[currency.symbol] ?? 0
+//            return curr
+//        }catch{
+//            print("Error fetching data from Pexels: \(error)")
+//        }
+//        return nil
+//    }
     
 }

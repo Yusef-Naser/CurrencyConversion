@@ -30,6 +30,9 @@ struct DetailsView: View {
         .onAppear{
             self.viewModel.getLatestCurrency()
         }
+        .alert(isPresented: $viewModel.showAlert, content: {
+            Alert(title: Text(viewModel.errorMessage))
+        })
         
     }
 }

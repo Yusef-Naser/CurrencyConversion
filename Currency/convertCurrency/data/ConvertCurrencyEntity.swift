@@ -13,6 +13,7 @@ struct ConvertCurrencyEntity : Decodable {
     let timestamp: Int?
     let base, date: String?
     let rates: [String : Double]?
+    let error: APIError?
     var rateCurrencies : [RateCurrencyEntity]?
     
     enum CodingKeys: CodingKey {
@@ -21,6 +22,7 @@ struct ConvertCurrencyEntity : Decodable {
         case base
         case date
         case rates
+        case error
     }
     
     mutating func createCurrencies () {
@@ -48,4 +50,9 @@ struct RateCurrencyEntity : Codable , Identifiable {
         case rate
         case symbol
     }
+}
+
+struct APIError: Codable {
+    let code: Int?
+    let info: String?
 }

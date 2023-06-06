@@ -65,6 +65,9 @@ struct ConvertCurrencyView: View {
                 Spacer()
                
             }
+            .alert(isPresented: $viewModel.showAlert, content: {
+                Alert(title: Text(viewModel.errorMessage))
+            })
             .navigationTitle("Currency Converter")
         }
         

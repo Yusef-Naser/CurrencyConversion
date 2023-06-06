@@ -19,43 +19,30 @@ class SelectCurrencyVM : ObservableObject {
         fetchCurrencies()
     }
     
-    func fetchCurrencies () {
-        guard let url = URL(string: Configurations.PUBLIC_URL + "symbols?access_key=" + Configurations.API_KEY ) else { fatalError("Missing URL") }
-        
-        let task = URLSession.shared.dataTask(with: url) { data , response , error in
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                self.showAlert = true
-                return
-            }
-            if let data = data {
-                DispatchQueue.main.async {
-                    var currencies = ParseData<CurrenciesEntity>.parseJsonData(data: data)
-                    //self.currencies = parseJsonData (data : data)
-                    currencies?.createCurrencies()
-                    self.currencies = currencies
-                    if let error =  self.currencies?.error {
-                        self.errorMessage = error.info ?? "Error"
-                        self.showAlert = true
-                    }
-                    
-                }
-            }
+    func loadCurrenceis (cur : CurrenciesEntity) {
+        var localCurrencies = cur
+        localCurrencies.createCurrencies()
+        self.currencies = localCurrencies
+        if let error =  self.currencies?.error {
+            self.errorMessage = error.info ?? "Error"
+            self.showAlert = true
         }
-        task.resume()
     }
     
-//    private func parseJsonData(data : Data) -> CurrenciesEntity? {
-//        let decode = JSONDecoder()
-//        do {
-//            var curr = try decode.decode(CurrenciesEntity.self , from: data)
-//            curr.createCurrencies()
-//            return curr
-//        }catch{
-//            print("Error fetching data from Pexels: \(error)")
-//        }
-//        return nil
-//    }
-    
+    func fetchCurrencies () {
+
+        let model = GetCurrenciesModel( httpMethod: .get, queryItems: [])
+        ApiClient<CurrenciesEntity>().performRequest(request: model.buildRequest()) { error  in
+             
+            self.errorMessage = error.localizedDescription
+            self.showAlert = true
+             
+        } completionSuccess: { currencies in
+            self.loadCurrenceis(cur: currencies)
+        }
+
+        
+    }
+
     
 }

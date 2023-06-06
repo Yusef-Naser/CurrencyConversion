@@ -16,7 +16,7 @@ class ConvertCurrencyVM : ObservableObject {
     
     @Published var currency_1 = CurrencyEntity(country: "Select", symbol: "Select")
     @Published var currency_2 = CurrencyEntity(country: "Select", symbol: "Select")
-    @Published var amountFrom : String = "0"
+    @Published var amountFrom : String = "1"
     @Published var amountTo : String = "0"
     
     var rateCurrency_1 : Double = 0.0
@@ -31,6 +31,12 @@ class ConvertCurrencyVM : ObservableObject {
     }
     
     func conversionCurrencies () {
+        guard (currency_1.country != "Select" && currency_2.country != "Select") else {
+            showAlert = true
+            errorMessage = "Please select both Currenceis"
+            return
+        }
+        
         getConvertedCurrency( currency: currency_1) { [weak self] rate in
             self?.rateCurrency_1 = rate
             self?.getConvertedCurrency(currency: self?.currency_2) { [weak self] rate in
@@ -87,45 +93,29 @@ class ConvertCurrencyVM : ObservableObject {
         }
     }
     
-    private func getConvertedCurrency ( currency : CurrencyEntity? ,  rate : @escaping (_ rate : Double)->Void ) {
-        
-        let publicUrl = Configurations.PUBLIC_URL + "latest?access_key=" + Configurations.API_KEY
-        + "&symbols=\(currency?.symbol ?? "")"
-        
-        guard let url = URL(string:  publicUrl ) else { fatalError("Missing URL") }
-        
-        let task = URLSession.shared.dataTask(with: url) { data , response , error in
-            if let error = error {
-                self.errorMessage = error.localizedDescription
-                self.showAlert = true
-                return
-            }
-            if let data = data {
-                DispatchQueue.main.async {
-                    self.convertedCurrency = ParseData<ConvertCurrencyEntity>.parseJsonData(data: data)
-                    if let error =  self.convertedCurrency?.error {
-                        self.errorMessage = error.info ?? "Error"
-                        self.showAlert = true
-                    }
-                    self.lastTimeStamp = Int64(self.convertedCurrency?.timestamp ?? 0)
-                    rate(self.convertedCurrency?.rates?[currency?.symbol ?? ""] ?? 0)
-                    
-                }
-            }
+    func loadResult (convert : ConvertCurrencyEntity) {
+        self.convertedCurrency = convert
+        if let error =  self.convertedCurrency?.error {
+            self.errorMessage = error.info ?? "Error"
+            self.showAlert = true
         }
-        task.resume()
+        self.lastTimeStamp = Int64(self.convertedCurrency?.timestamp ?? 0)
     }
     
-//    private func parseJsonData(data : Data ) -> ConvertCurrencyEntity? {
-//        let decode = JSONDecoder()
-//        do {
-//            let curr = try decode.decode(ConvertCurrencyEntity.self , from: data)
-//            //rate = curr.rates?[currency.symbol] ?? 0
-//            return curr
-//        }catch{
-//            print("Error fetching data from Pexels: \(error)")
-//        }
-//        return nil
-//    }
+    private func getConvertedCurrency ( currency : CurrencyEntity? ,  rate : @escaping (_ rate : Double)->Void ) {
+
+        let model = GetConvertModel(symbols: currency?.symbol )
+        ApiClient<ConvertCurrencyEntity>().performRequest(request: model.buildRequest()) { error  in
+             
+            self.errorMessage = error.localizedDescription
+            self.showAlert = true
+             
+        } completionSuccess: { currencies in
+            self.loadResult(convert: currencies)
+            rate(self.convertedCurrency?.rates?[currency?.symbol ?? ""] ?? 0)
+        }
+        
+        
+    }
     
 }

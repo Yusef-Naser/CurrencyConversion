@@ -36,7 +36,7 @@ class SelectCurrencyVM : ObservableObject {
     
     func fetchCurrencies () {
 
-        let model = GetCurrenciesModel( httpMethod: .get, queryItems: [])
+        let model = GetCurrenciesModel()
         ApiClient<CurrenciesEntity>().performRequest(request: model.buildRequest()) { error  in
              
             self.loadErrors(error: error)

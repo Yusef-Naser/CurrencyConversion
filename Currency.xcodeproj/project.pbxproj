@@ -134,7 +134,6 @@
 			isa = PBXGroup;
 			children = (
 				2CD9022C2A2FFEBE0019AC7B /* models */,
-				2CD902182A2FF21E0019AC7B /* ApiClient.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -256,11 +255,11 @@
 		2CD9022C2A2FFEBE0019AC7B /* models */ = {
 			isa = PBXGroup;
 			children = (
+				2CD902182A2FF21E0019AC7B /* ApiClient.swift */,
+				2CD902452A300E3C0019AC7B /* Base */,
 				2CD9022D2A2FFEBE0019AC7B /* GetConvertModel.swift */,
-				2CD9022E2A2FFEBE0019AC7B /* BaseRequestModel.swift */,
 				2CD9022F2A2FFEBE0019AC7B /* GetRatesModel.swift */,
 				2CD902302A2FFEBE0019AC7B /* GetCurrenciesModel.swift */,
-				2CD902312A2FFEBE0019AC7B /* RequestModel.swift */,
 			);
 			path = models;
 			sourceTree = "<group>";
@@ -295,6 +294,15 @@
 				2CD902432A300D170019AC7B /* DetailsVMTests.swift */,
 			);
 			path = DatailsTests;
+			sourceTree = "<group>";
+		};
+		2CD902452A300E3C0019AC7B /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				2CD902312A2FFEBE0019AC7B /* RequestModel.swift */,
+				2CD9022E2A2FFEBE0019AC7B /* BaseRequestModel.swift */,
+			);
+			path = Base;
 			sourceTree = "<group>";
 		};
 		2CE6A3C12A2DE44F007BC455 /* details */ = {

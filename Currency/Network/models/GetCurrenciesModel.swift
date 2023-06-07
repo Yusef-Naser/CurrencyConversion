@@ -9,8 +9,8 @@ import Foundation
 
 class GetCurrenciesModel : RequestModel {
 
-    init( httpMethod: HTTPMethod, queryItems: [URLQueryItem]) {
-        super.init(url: "symbols", httpMethod: httpMethod, queryItems: queryItems)
+    init() {
+        super.init(url: "symbols", httpMethod: .get, queryItems: [])
     }
     
     // add additional headers for specific model

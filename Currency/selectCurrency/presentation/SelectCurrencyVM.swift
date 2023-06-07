@@ -10,7 +10,7 @@ import Foundation
 
 class SelectCurrencyVM : ObservableObject {
  
-    @Published private(set) var currencies : CurrenciesEntity?
+    @Published var currencies : CurrenciesEntity?
     @Published var showAlert = false
     @Published var errorMessage = ""
     @Published var searchText = ""
@@ -29,13 +29,17 @@ class SelectCurrencyVM : ObservableObject {
         }
     }
     
+    func loadErrors (error : Error) {
+        self.errorMessage = error.localizedDescription
+        self.showAlert = true
+    }
+    
     func fetchCurrencies () {
 
         let model = GetCurrenciesModel( httpMethod: .get, queryItems: [])
         ApiClient<CurrenciesEntity>().performRequest(request: model.buildRequest()) { error  in
              
-            self.errorMessage = error.localizedDescription
-            self.showAlert = true
+            self.loadErrors(error: error)
              
         } completionSuccess: { currencies in
             self.loadCurrenceis(cur: currencies)

@@ -28,13 +28,18 @@ class DetailsVM : ObservableObject {
         }
         self.convertedCurrency?.createCurrencies()
     }
+    
+    func loadError (error : Error) {
+        self.errorMessage = error.localizedDescription
+        self.showAlert = true
+    }
+    
     func getLatestCurrency () {
         
         let model = GetRatesModel()
         ApiClient<ConvertCurrencyEntity>().performRequest(request: model.buildRequest()) { error  in
              
-            self.errorMessage = error.localizedDescription
-            self.showAlert = true
+            self.loadError(error: error)
              
         } completionSuccess: { currencies in
             self.loadResult(result: currencies)

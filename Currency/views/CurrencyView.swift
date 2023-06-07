@@ -31,15 +31,13 @@ struct CurrencyView: View {
                     }
                     
             }
-          
-            
-            
+        
             TextField("Amount", text: $amount )
                 .multilineTextAlignment(.center)
+                .frame( maxWidth: 100 , maxHeight: 50)
                 .background(Color.gray)
-                .frame( maxWidth: 100)
                 .cornerRadius(5)
-            
+                .keyboardType(.numberPad)
             
             
         }

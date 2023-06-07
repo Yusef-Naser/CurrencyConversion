@@ -7,7 +7,12 @@
 
 import Foundation
 
-struct ConvertCurrencyEntity : Decodable {
+struct ConvertCurrencyEntity : Decodable , Equatable {
+    static func == (lhs: ConvertCurrencyEntity, rhs: ConvertCurrencyEntity) -> Bool {
+        return lhs.timestamp == rhs.timestamp && lhs.base == rhs.base
+        
+    }
+    
     
     let success: Bool?
     let timestamp: Int?

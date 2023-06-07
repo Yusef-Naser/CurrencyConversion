@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-struct CurrencyEntity : Decodable , Identifiable {
+struct CurrencyEntity : Decodable , Identifiable , Equatable {
     
     var id = UUID()
     var country : String
@@ -18,6 +18,7 @@ struct CurrencyEntity : Decodable , Identifiable {
         case country
         case symbol
     }
+    
     
 }
 

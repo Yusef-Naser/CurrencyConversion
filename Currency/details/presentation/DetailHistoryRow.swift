@@ -14,13 +14,13 @@ struct DetailHistoryRow: View {
     var body: some View {
         VStack (alignment: .leading ) {
             HStack {
-                Text("\(item.fromAmount)")
+                Text("\(item.fromAmount.round(to: 2))")
                 Text("\(item.fromSymbol)")
             }
             
             Spacer()
             HStack {
-                Text("\(item.toAmount)")
+                Text("\(item.toAmount.round(to: 2))")
                 Text("\(item.toSymbol)")
             }
             

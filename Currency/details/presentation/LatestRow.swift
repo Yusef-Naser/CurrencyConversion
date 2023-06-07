@@ -15,7 +15,7 @@ struct LatestRow: View {
         HStack {
             
             Text(rate.symbol + ": ")
-            Text("\(rate.rate)")
+            Text("\(rate.rate.round(to: 2))")
             
         }
     }

@@ -38,9 +38,9 @@ class ConvertCurrencyVM : ObservableObject {
         }
         
         getConvertedCurrency( currency: currency_1) { [weak self] rate in
-            self?.rateCurrency_1 = rate
+            self?.rateCurrency_1 = rate.round(to: 2)
             self?.getConvertedCurrency(currency: self?.currency_2) { [weak self] rate in
-                self?.rateCurrency_2 = rate
+                self?.rateCurrency_2 = rate.round(to: 2)
                 self?.getRate()
                 self?.saveObjectToCoreData()
             }
@@ -57,7 +57,7 @@ class ConvertCurrencyVM : ObservableObject {
         let amountFromDouble = Double(amountFrom) ?? 0
         var amountToDouble = Double(amountTo) ?? 0
         
-        amountToDouble = amountFromDouble * rate
+        amountToDouble = (amountFromDouble * rate ).round(to: 2)
         amountTo = "\(amountToDouble)"
     }
     
@@ -102,13 +102,17 @@ class ConvertCurrencyVM : ObservableObject {
         self.lastTimeStamp = Int64(self.convertedCurrency?.timestamp ?? 0)
     }
     
+    func loadError(error : Error) {
+        self.errorMessage = error.localizedDescription
+        self.showAlert = true
+    }
+    
     private func getConvertedCurrency ( currency : CurrencyEntity? ,  rate : @escaping (_ rate : Double)->Void ) {
 
         let model = GetConvertModel(symbols: currency?.symbol )
         ApiClient<ConvertCurrencyEntity>().performRequest(request: model.buildRequest()) { error  in
              
-            self.errorMessage = error.localizedDescription
-            self.showAlert = true
+            self.loadError(error: error)
              
         } completionSuccess: { currencies in
             self.loadResult(convert: currencies)
